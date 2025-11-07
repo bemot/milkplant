@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Optimization Result</title>
+</head>
+<body>
+    <h1>Best Production Plan</h1>
+    <p><strong>Total Production Time:</strong> {{ best_time }} minutes</p>
+    <table border="1">
+        <tr><th>Yogurt</th><th>Assigned Line</th><th>Start Time</th><th>End Time</th></tr>
+        {% for yogurt, line, start, end in schedule %}
+        <tr><td>{{ yogurt }}</td><td>{{ line }}</td><td>{{ start }}</td><td>{{ end }}</td></tr>
+        {% endfor %}
+    </table>
+    <h2>Gantt Chart</h2>
+    <img src="/gantt" alt="Gantt Chart">
+    <br><a href="/">Run Again</a>
+</body>
+</html>
