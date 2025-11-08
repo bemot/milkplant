@@ -51,17 +51,26 @@ def simulate_production():
 
 def draw_gantt_chart():
     fig, ax = plt.subplots(figsize=(12, 6))
-    colors = {}
-    color_cycle = plt.cm.get_cmap('tab20', len(PRODUCTION_PLAN))
+    
+    # Pre-assign consistent colors to all yogurt types
+    yogurt_types = sorted(PRODUCTION_PLAN.keys())
+    color_cycle = plt.cm.get_cmap('tab20', len(yogurt_types))
+    colors = {yogurt: color_cycle(i) for i, yogurt in enumerate(yogurt_types)}
 
     gantt_data_sorted = sorted(gantt_data, key=lambda x: x[0])
     y_labels = list(sorted(set(line for line, _, _, _ in gantt_data_sorted)))
     y_positions = {label: i for i, label in enumerate(y_labels)}
+    
+    used_yogurts = set()
 
     for i, (line, start, end, yogurt) in enumerate(gantt_data_sorted):
-        color = colors.setdefault(yogurt, color_cycle(len(colors)))
+        color = colors[yogurt]
+        # Only add label first time this yogurt appears
+        label = yogurt if yogurt not in used_yogurts else ""
+        used_yogurts.add(yogurt)
+        
         ax.barh(y_positions[line], end - start, left=start, height=0.4,
-                label=yogurt if yogurt not in colors else "", color=color)
+                label=label, color=color)
         label_text = f"{yogurt}\n{round(start)}–{round(end)}"
         ax.text(start + (end - start)/2, y_positions[line], label_text,
                 va='center', ha='center', fontsize=7, color='white')
