@@ -3,11 +3,129 @@
 <head>
     <meta charset="UTF-8">
     <title>Yogurt Production Optimizer</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input[type="number"] {
+            width: 200px;
+            padding: 5px;
+        }
+        input[type="range"] {
+            width: 200px;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .info {
+            background-color: #f0f0f0;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .mode-section {
+            border: 2px solid #ddd;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+        }
+        .mode-section h3 {
+            margin-top: 0;
+        }
+    </style>
 </head>
 <body>
     <h1>Yogurt Production Line Optimization</h1>
-    <form action="/optimize" method="post">
-        <button type="submit">Run Genetic Algorithm</button>
-    </form>
+    
+    <div class="info">
+        <h3>About the Genetic Algorithm</h3>
+        <p>This tool optimizes the yogurt production schedule using a Genetic Algorithm (GA).</p>
+        <p>You can either use default parameters or customize them below.</p>
+    </div>
+
+    <div class="mode-section">
+        <h3>Standard Optimization</h3>
+        <form action="/optimize" method="post">
+            <input type="hidden" name="mode" value="standard">
+            
+            <div class="form-group">
+                <label for="population_size">Population Size (20-150):</label>
+                <input type="number" id="population_size" name="population_size" 
+                       value="30" min="20" max="150">
+            </div>
+            
+            <div class="form-group">
+                <label for="generations">Generations (50-500):</label>
+                <input type="number" id="generations" name="generations" 
+                       value="300" min="50" max="500">
+            </div>
+            
+            <div class="form-group">
+                <label for="mutation_rate">Mutation Rate (0.05-0.7): <span id="mut_value">0.2</span></label>
+                <input type="range" id="mutation_rate" name="mutation_rate" 
+                       value="0.2" min="0.05" max="0.7" step="0.05" 
+                       oninput="document.getElementById('mut_value').textContent = this.value">
+            </div>
+            
+            <button type="submit">Run Optimization</button>
+        </form>
+    </div>
+
+    <div class="mode-section">
+        <h3>Auto-Optimize Hyperparameters (Random Search)</h3>
+        <form action="/optimize" method="post">
+            <input type="hidden" name="mode" value="random">
+            
+            <div class="form-group">
+                <label for="random_trials">Number of Random Trials (5-20):</label>
+                <input type="number" id="random_trials" name="random_trials" 
+                       value="10" min="5" max="20">
+            </div>
+            
+            <button type="submit">Find Best Parameters (Random)</button>
+        </form>
+    </div>
+
+    <div class="mode-section">
+        <h3>Auto-Optimize Hyperparameters (Evolutionary)</h3>
+        <form action="/optimize" method="post">
+            <input type="hidden" name="mode" value="evolutionary">
+            
+            <div class="form-group">
+                <label for="meta_population">Meta-Population Size (5-15):</label>
+                <input type="number" id="meta_population" name="meta_population" 
+                       value="8" min="5" max="15">
+            </div>
+            
+            <div class="form-group">
+                <label for="meta_generations">Meta-Generations (2-8):</label>
+                <input type="number" id="meta_generations" name="meta_generations" 
+                       value="4" min="2" max="8">
+            </div>
+            
+            <button type="submit">Find Best Parameters (Evolutionary)</button>
+        </form>
+    </div>
+
 </body>
 </html>

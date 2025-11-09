@@ -3,18 +3,106 @@
 <head>
     <meta charset="UTF-8">
     <title>Optimization Result</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1000px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #4CAF50;
+            color: white;
+        }
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        .config-box {
+            background-color: #e7f3ff;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        .config-box h3 {
+            margin-top: 0;
+        }
+        .param {
+            display: inline-block;
+            margin-right: 20px;
+        }
+        img {
+            max-width: 100%;
+            height: auto;
+            border: 1px solid #ddd;
+            margin: 20px 0;
+        }
+        a {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        a:hover {
+            background-color: #45a049;
+        }
+    </style>
 </head>
 <body>
-    <h1>Best Production Plan</h1>
-    <p><strong>Total Production Time:</strong> {{ best_time }} minutes</p>
+    <h1>✅ Best Production Plan Found</h1>
+    
+    <div class="config-box">
+        <h3>Hyperparameters Used</h3>
+        {% if mode == 'random' %}
+            <p><strong>Mode:</strong> Random Search Optimization</p>
+        {% elif mode == 'evolutionary' %}
+            <p><strong>Mode:</strong> Evolutionary Optimization</p>
+        {% else %}
+            <p><strong>Mode:</strong> Standard Optimization</p>
+        {% endif %}
+        
+        <div class="param"><strong>Population Size:</strong> {{ config.population_size }}</div>
+        <div class="param"><strong>Generations:</strong> {{ config.generations }}</div>
+        <div class="param"><strong>Mutation Rate:</strong> {{ config.mutation_rate }}</div>
+    </div>
+    
+    <p style="font-size: 24px;"><strong>Total Production Time:</strong> <span style="color: #4CAF50;">{{ best_time }} hours</span></p>
+    
     <h2>Gantt Chart</h2>
     <img src="/gantt" alt="Gantt Chart">
+    
     <h2>Production Schedule</h2>
-    <table border="1">
-        <tr><th>Yogurt</th><th>Assigned Line</th><th>Start Time</th><th>End Time</th></tr>
+    <table>
+        <tr>
+            <th>Yogurt Type</th>
+            <th>Assigned Line</th>
+            <th>Start Time (hours)</th>
+            <th>End Time (hours)</th>
+            <th>Duration (hours)</th>
+        </tr>
         {% for yogurt, line, start, end in schedule %}
-        <tr><td>{{ yogurt }}</td><td>{{ line }}</td><td>{{ start }}</td><td>{{ end }}</td></tr>
+        <tr>
+            <td>{{ yogurt }}</td>
+            <td>{{ line }}</td>
+            <td>{{ start }}</td>
+            <td>{{ end }}</td>
+            <td>{{ "%.2f"|format(end - start) }}</td>
+        </tr>
         {% endfor %}
     </table>
+    
+    <a href="/">← Run Another Optimization</a>
 </body>
 </html>
